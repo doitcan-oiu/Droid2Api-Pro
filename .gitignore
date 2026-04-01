@@ -1,0 +1,9 @@
+droid2api.exe
+droid2api
+/data/
+/logs/
+*.log
+.env
+config.yaml
+/old/
+/.claude/
