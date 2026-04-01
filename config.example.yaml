@@ -1,0 +1,81 @@
+port: 3000
+dev_mode: false
+user_agent: "factory-cli/0.85.0"
+system_prompt: "You are Droid, an AI software engineering agent built by Factory.\n\n"
+
+# 多令牌轮询 (round-robin)
+# 支持多个 DROID_REFRESH_KEY 做负载均衡
+# 也可通过环境变量设置: DROID_REFRESH_KEY=key1,key2,key3
+refresh_keys: []
+
+# 令牌刷新间隔 (小时)
+refresh_interval_hours: 6
+
+# 模型重定向: 将旧模型 ID 映射到新的
+model_redirects:
+  claude-3-5-haiku-20241022: "claude-haiku-4-5-20251001"
+  claude-sonnet-4-5: "claude-sonnet-4-5-20250929"
+
+# 上游端点
+endpoints:
+  - name: openai
+    base_url: "https://api.factory.ai/api/llm/o/v1/responses"
+  - name: anthropic
+    base_url: "https://api.factory.ai/api/llm/a/v1/messages"
+  - name: google
+    base_url: "https://api.factory.ai/api/llm/g/v1/generate"
+  - name: common
+    base_url: "https://api.factory.ai/api/llm/o/v1/chat/completions"
+
+# 代理列表 (可选, 轮询)
+proxies: []
+
+# 模型定义
+models:
+  - name: "Opus 4.5"
+    id: "claude-opus-4-5-20251101"
+    type: "anthropic"
+    reasoning: "auto"
+    provider: "anthropic"
+
+  - name: "Opus 4.6"
+    id: "claude-opus-4-6"
+    type: "anthropic"
+    reasoning: "auto"
+    provider: "anthropic"
+
+  - name: "Haiku 4.5"
+    id: "claude-haiku-4-5-20251001"
+    type: "anthropic"
+    reasoning: "auto"
+    provider: "anthropic"
+
+  - name: "Sonnet 4.5"
+    id: "claude-sonnet-4-5-20250929"
+    type: "anthropic"
+    reasoning: "auto"
+    provider: "anthropic"
+
+  - name: "Sonnet 4.6"
+    id: "claude-sonnet-4-6"
+    type: "anthropic"
+    reasoning: "auto"
+    provider: "anthropic"
+
+  - name: "GPT-5.4"
+    id: "gpt-5.4"
+    type: "openai"
+    reasoning: "auto"
+    provider: "openai"
+
+  - name: "Gemini 3 flash"
+    id: "gemini-3-flash-preview"
+    type: "google"
+    reasoning: "auto"
+    provider: "google"
+
+  - name: "Gemini 3.1 Pro"
+    id: "gemini-3.1-pro-preview"
+    type: "google"
+    reasoning: "auto"
+    provider: "google"
