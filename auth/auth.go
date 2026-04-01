@@ -108,7 +108,7 @@ func Initialize() error {
 // loadSavedSlot reads data/auth_slot_X.json and overrides the slot's tokens
 // if the saved refresh_token is different from config (i.e. it was rotated by WorkOS).
 func loadSavedSlot(slot *tokenSlot) {
-	filePath := filepath.Join(".", "data", fmt.Sprintf("auth_slot_%d.json", slot.index))
+	filePath := filepath.Join(config.BaseDir(), "data", fmt.Sprintf("auth_slot_%d.json", slot.index))
 	data, err := os.ReadFile(filePath)
 	if err != nil {
 		// No saved file — use config.yaml token (first run)
@@ -437,7 +437,7 @@ func (m *Manager) saveSlotTokens(slot *tokenSlot, accessToken, refreshToken stri
 		"refresh_token": refreshToken,
 		"last_updated":  time.Now().Format(time.RFC3339),
 	}
-	dir := filepath.Join(".", "data")
+	dir := filepath.Join(config.BaseDir(), "data")
 	os.MkdirAll(dir, 0o755)
 	filePath := filepath.Join(dir, fmt.Sprintf("auth_slot_%d.json", slot.index))
 	data, _ := json.MarshalIndent(authData, "", "  ")
@@ -599,7 +599,7 @@ func RemoveSlot(index int) error {
 	})
 
 	// Remove saved token file
-	filePath := filepath.Join(".", "data", fmt.Sprintf("auth_slot_%d.json", index))
+	filePath := filepath.Join(config.BaseDir(), "data", fmt.Sprintf("auth_slot_%d.json", index))
 	os.Remove(filePath)
 
 	log.Printf("[INFO] Removed token slot[%d], %d slots remaining", index, len(globalManager.slots))

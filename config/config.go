@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -51,13 +52,24 @@ type AppConfig struct {
 var (
 	cfg     atomic.Pointer[AppConfig]
 	cfgPath string
+	baseDir string
 	once    sync.Once
 )
+
+// BaseDir returns the directory containing the config file.
+// Used by auth/handler to place data/ and logs/ next to config.
+func BaseDir() string {
+	return baseDir
+}
 
 // Load reads config.yaml (with env override for refresh_keys) and starts file watcher.
 // If the config file does not exist, it is created with default values.
 func Load(path string) error {
 	cfgPath = path
+	baseDir = filepath.Dir(path)
+	if baseDir == "" || baseDir == "." {
+		baseDir, _ = os.Getwd()
+	}
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		log.Printf("[INFO] 配置文件 %s 不存在，正在生成默认配置...", path)
 		if err := os.WriteFile(path, []byte(defaultConfigYAML), 0o644); err != nil {

@@ -41,7 +41,7 @@ func initReqLog() {
 	if reqLogFile != nil {
 		return
 	}
-	dir := filepath.Join(".", "logs")
+	dir := filepath.Join(config.BaseDir(), "logs")
 	os.MkdirAll(dir, 0o755)
 	name := fmt.Sprintf("requests_%s.log", time.Now().Format("2006-01-02"))
 	f, err := os.OpenFile(filepath.Join(dir, name), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o644)
